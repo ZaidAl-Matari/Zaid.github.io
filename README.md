@@ -1,13 +1,92 @@
-# Coursera Developing Data Products Week 2 Peer-graded Assignment: Leaflet
+---
+title: 'Developing Data Products : R Markdown Presentation & Plotly'
+subtitle: 'Please use Right/Down Arrow or Space to advance to the next slide. This Presentation has 7 slides.'
+author: "Aniruddha Chakraborty"
+date: "August 7, 2017"
+output: ioslides_presentation
+---
 
-In this project, we created a web page using R Markdown that features a map created with Leaflet, representing the number of incoming passengers per station on the Parisian RATP railroad network in 2015.
+```{r setup, include=FALSE,message=FALSE,warning=FALSE}
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE,
+	cache = TRUE,
+	tidy = TRUE,
+	tidy.opts = list(width.cutoff = 60)
+)
+```
 
-The web page is [published online on GitHub Pages](https://zaidal-matari.github.io/Zaid.github.io/).
+## Synopsis {.smaller}
 
-The source data sets are not included in this repository. To reproduce this web page, you will need to download the following files and place them in a subdirectory named `data`:
+Following instructions have been given for the assignment -   
 
-- `positions-geographiques-des-stations-du-reseau-ratp.csv`, from [Positions géographiques des stations du réseau RATP](https://data.ratp.fr/explore/dataset/positions-geographiques-des-stations-du-reseau-ratp/information/) (geographic position of stations on RATP network).
+1. Create a web page presentation using R Markdown that features a plot created with Plotly.  
+2. Host your webpage on either RPubs, GitHub Pages, or NeoCities.   
+3. Your webpage must contain the date that you created the document, and it must contain a plot created with Plotly.
 
-- `trafic-annuel-entrant-par-station-du-reseau-ferre-2015.csv`, from [Trafic annuel entrant par station du réseau ferré 2015](https://data.ratp.fr/explore/dataset/trafic-annuel-entrant-par-station-du-reseau-ferre-2015/export/) (annual traffic by station on railway network 2015).
+The **Interactive Plots** presented in this Assignment are as follows -
 
-- `traces-du-reseau-ferre-idf.csv`, from [Tracés du réseau de transport ferré d'Ile-de-France](https://opendata.stif.info/explore/dataset/traces-du-reseau-ferre-idf/) (layout of the Île-de-France railway network).
+1. A **Heatmap** depicting the Daily Ozone Levels in New York over a period of 5 months (May to September 1973).
+2. A **Time-Series chart** of the Population of the United States (in millions) for the period 1790-1970.
+
+## Data Processing for Plot 1 : Heatmap R Code{.smaller}
+
+```{r results='hide'}
+library(datasets);library(plotly);library(reshape2)
+data("airquality") ## Load the airquality dataset
+
+airquality$Month=as.factor(airquality$Month) ## Convert Month to factor
+ozone_daily=airquality[,c(1,5,6)] ## Extract Ozone, Month and Day columns
+
+## Convert Long format to Wide for input to Heatmap
+ozone_daily=dcast(ozone_daily,Day~Month,value.var = "Ozone") 
+ozone_daily=as.matrix(ozone_daily[,-1]) ## Convert to Matrix
+colnames(ozone_daily)=c("May","June","July","August","September")
+
+## Plotly command
+plot_ly(z=ozone_daily,colorscale="Hot",x=colnames(ozone_daily),type="heatmap",colorbar = list(title = "Ozone Levels (parts per billion)"))%>%layout(title = "Daily Ozone Levels in New York, May to September 1973", xaxis = list(title = "Month"),yaxis = list(title = "Day"))
+```
+
+## Plotly - Interactive Plot 1: Heatmap
+
+```{r echo=FALSE}
+library(datasets);library(plotly);library(reshape2)
+data("airquality") ## Load the airquality dataset
+
+airquality$Month=as.factor(airquality$Month) ## Convert Month to factor
+ozone_daily=airquality[,c(1,5,6)] ## Extract Ozone, Month and Day columns
+
+## Convert Long format to Wide for input to Heatmap
+ozone_daily=dcast(ozone_daily,Day~Month,value.var = "Ozone") 
+ozone_daily=as.matrix(ozone_daily[,-1]) ## Convert to Matrix
+colnames(ozone_daily)=c("May","June","July","August","September")
+
+## Plotly command
+plot_ly(z=ozone_daily,colorscale="Hot",x=colnames(ozone_daily),type="heatmap",colorbar = list(title = "Ozone Levels (parts per billion)"))%>%layout(title = "Daily Ozone Levels in New York, May to September 1973", xaxis = list(title = "Month"),yaxis = list(title = "Day"))
+```
+
+## Plot 2 : Time-Series Chart R Code{.smaller}
+
+```{r results='hide'}
+library(datasets)
+library(plotly)
+data(uspop) ## Load the data set that gives the population of the United States 
+## (in millions) as recorded by the decennial census for the period 1790–1970.
+
+## Plotly Command
+plot_ly(x=~time(uspop),y=~uspop,type="scatter",mode="lines") %>% layout(title = "U.S. Population in millions for the period 1790-1970", xaxis = list(title = "Year"),yaxis = list(title = "U.S. Population (millions)"))
+```
+
+## Plotly - Interactive Plot 2: Time-Series Chart
+
+```{r echo=FALSE}
+library(datasets)
+library(plotly)
+data(uspop) ## Load the data set that gives the population of the United States in millions for the period 1790-1970
+
+## Plotly Command
+plot_ly(x=~time(uspop),y=~uspop,type="scatter",mode="lines") %>% layout(title = "U.S. Population in millions for the period 1790-1970", xaxis = list(title = "Year"),yaxis = list(title = "U.S. Population (millions)"))
+```
+
+## Thank You!
