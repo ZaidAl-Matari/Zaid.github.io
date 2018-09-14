@@ -1,23 +1,10 @@
----
-title: 'Developing Data Products : R Markdown Presentation & Plotly'
-subtitle: 'Please use Right/Down Arrow or Space to advance to the next slide. This Presentation has 7 slides.'
-author: "Aniruddha Chakraborty"
-date: "August 7, 2017"
-output: ioslides_presentation
----
+# Developing-Data-Products-R-Markdown-Presentation-Plotly
 
-```{r setup, include=FALSE,message=FALSE,warning=FALSE}
-knitr::opts_chunk$set(
-	echo = TRUE,
-	message = FALSE,
-	warning = FALSE,
-	cache = TRUE,
-	tidy = TRUE,
-	tidy.opts = list(width.cutoff = 60)
-)
-```
+## This is a repo with the gh-pages branch. The HTML page can be viewed online by clicking [on this Github Pages link.](https://aniruddhachakraborty.github.io/Developing-Data-Products-R-Markdown-Presentation-Plotly/Plotly.html)
 
-## Synopsis {.smaller}
+## R markdown and compiled HTML (Source code) files can be found in the repository itself.
+
+## Synopsis
 
 Following instructions have been given for the assignment -   
 
@@ -29,64 +16,3 @@ The **Interactive Plots** presented in this Assignment are as follows -
 
 1. A **Heatmap** depicting the Daily Ozone Levels in New York over a period of 5 months (May to September 1973).
 2. A **Time-Series chart** of the Population of the United States (in millions) for the period 1790-1970.
-
-## Data Processing for Plot 1 : Heatmap R Code{.smaller}
-
-```{r results='hide'}
-library(datasets);library(plotly);library(reshape2)
-data("airquality") ## Load the airquality dataset
-
-airquality$Month=as.factor(airquality$Month) ## Convert Month to factor
-ozone_daily=airquality[,c(1,5,6)] ## Extract Ozone, Month and Day columns
-
-## Convert Long format to Wide for input to Heatmap
-ozone_daily=dcast(ozone_daily,Day~Month,value.var = "Ozone") 
-ozone_daily=as.matrix(ozone_daily[,-1]) ## Convert to Matrix
-colnames(ozone_daily)=c("May","June","July","August","September")
-
-## Plotly command
-plot_ly(z=ozone_daily,colorscale="Hot",x=colnames(ozone_daily),type="heatmap",colorbar = list(title = "Ozone Levels (parts per billion)"))%>%layout(title = "Daily Ozone Levels in New York, May to September 1973", xaxis = list(title = "Month"),yaxis = list(title = "Day"))
-```
-
-## Plotly - Interactive Plot 1: Heatmap
-
-```{r echo=FALSE}
-library(datasets);library(plotly);library(reshape2)
-data("airquality") ## Load the airquality dataset
-
-airquality$Month=as.factor(airquality$Month) ## Convert Month to factor
-ozone_daily=airquality[,c(1,5,6)] ## Extract Ozone, Month and Day columns
-
-## Convert Long format to Wide for input to Heatmap
-ozone_daily=dcast(ozone_daily,Day~Month,value.var = "Ozone") 
-ozone_daily=as.matrix(ozone_daily[,-1]) ## Convert to Matrix
-colnames(ozone_daily)=c("May","June","July","August","September")
-
-## Plotly command
-plot_ly(z=ozone_daily,colorscale="Hot",x=colnames(ozone_daily),type="heatmap",colorbar = list(title = "Ozone Levels (parts per billion)"))%>%layout(title = "Daily Ozone Levels in New York, May to September 1973", xaxis = list(title = "Month"),yaxis = list(title = "Day"))
-```
-
-## Plot 2 : Time-Series Chart R Code{.smaller}
-
-```{r results='hide'}
-library(datasets)
-library(plotly)
-data(uspop) ## Load the data set that gives the population of the United States 
-## (in millions) as recorded by the decennial census for the period 1790–1970.
-
-## Plotly Command
-plot_ly(x=~time(uspop),y=~uspop,type="scatter",mode="lines") %>% layout(title = "U.S. Population in millions for the period 1790-1970", xaxis = list(title = "Year"),yaxis = list(title = "U.S. Population (millions)"))
-```
-
-## Plotly - Interactive Plot 2: Time-Series Chart
-
-```{r echo=FALSE}
-library(datasets)
-library(plotly)
-data(uspop) ## Load the data set that gives the population of the United States in millions for the period 1790-1970
-
-## Plotly Command
-plot_ly(x=~time(uspop),y=~uspop,type="scatter",mode="lines") %>% layout(title = "U.S. Population in millions for the period 1790-1970", xaxis = list(title = "Year"),yaxis = list(title = "U.S. Population (millions)"))
-```
-
-## Thank You!
